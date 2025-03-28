@@ -12,6 +12,8 @@ var NET = 0;
 var NETM = 0;
 var PROC = 0;
 var PROCM = 0;
+var LVE_Time = 0;
+var LVE_Toggle = false;
 
 var sDEALG = 0;
 var sL1 = 0;
@@ -26,6 +28,8 @@ var sNET = 0;
 var sNETM = 0;
 var sPROC = 0;
 var sPROCM = 0;
+var sLVE_Time = 0;
+var sLVE_Toggle = false;
 
 function stageSel(stage) {
     // Home Display
@@ -112,6 +116,9 @@ if (logdattype == "DEALG") {
     console.log('DEALG');
     DEALG++;
     }
+if (logdattype == "LVE") {
+    runLVE();
+}
 
     // Shift Second Log Data
 
@@ -171,4 +178,92 @@ if (logdattype == "DEALG") {
         console.log('CLML');
         CLML++;
         }
+    if (logdattype == "sLVE") {
+    srunLVE();
+    }
 }
+
+function sleep(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+async function runLVE() {
+    leavebtn = document.getElementById("leave");
+    console.log('LVE Toggle');
+    if (!LVE_Toggle) {
+        LVE_Toggle = true;
+        leavebtn.style.backgroundColor = '#932525';
+        while (LVE_Toggle) {
+            LVE_Time++;
+            console.log(LVE_Time);
+            await sleep(1000);
+        }
+    } else {
+        LVE_Toggle = false;
+        leavebtn.style.backgroundColor = '#1e1e1e';
+    }
+}
+
+async function srunLVE() {
+    leavebtn = document.getElementById("sleave");
+    console.log('LVE Toggle');
+    if (!sLVE_Toggle) {
+        sLVE_Toggle = true;
+        leavebtn.style.backgroundColor = '#932525';
+        while (sLVE_Toggle) {
+            sLVE_Time++;
+            console.log(sLVE_Time);
+            await sleep(1000);
+        }
+    } else {
+        sLVE_Toggle = false;
+        leavebtn.style.backgroundColor = '#1e1e1e';
+    }
+}
+
+function sendDataWebhookVersion() {
+    // Don't be rude, Yes, I know this is an exposed webhook. Ignore it, it was never here. What do you get out of messing with programmers? Nothing...
+const webhookUrl = "https://discordapp.com/api/webhooks/1355015444955922483/dtljeMpgBfzNc-2mCdmvXzzPBxXQmE-8bVjDnADmXtWyDt82FZVkliGjZ3qzu8cLF9JR";
+const messageContent = document.getElementById('dataex').textContent;
+
+fetch(webhookUrl, {
+    method: "POST",
+    headers: {
+        "Content-Type": "application/json"
+    },
+    body: JSON.stringify({
+        content: messageContent
+    })
+})
+.then(response => {
+    if (response.ok) {
+        console.log("Message sent successfully!");
+    } else {
+        console.error("Failed to send message:", response.status);
+    }
+})
+.catch(error => {
+    console.error("Error sending message:", error);
+});
+}
+
+document.addEventListener('input', function(event) {
+    if (event.target.tagName === 'TEXTAREA' || event.target.tagName === 'INPUT') {
+        const autoPeriod = document.getElementById('autoperiod')?.value || null;
+        const telePeriod = document.getElementById('teleperiod')?.value || null;
+        const defenseData = document.getElementById('defenseData')?.value || null;
+        const namedat = document.getElementById('namedat')?.value || null;
+        const scouterteamnumber = document.getElementById('scouterteamnumber')?.value || null;
+        const scoutingteamdat = document.getElementById('scoutingteamdat')?.value || null;
+        const matchnumber = document.getElementById('matchnumber')?.value || null;
+        const position = document.getElementById('position')?.value || null;
+
+        const data = {
+            DEALG, L1, L2, L3, L4, L1M, L2M, L3M, L4M, NET, NETM, PROC, PROCM, LVE_Time, LVE_Toggle,
+            sDEALG, sL1, sL2, sL3, sL4, sL1M, sL2M, sL3M, sL4M, sNET, sNETM, sPROC, sPROCM, sLVE_Time, sLVE_Toggle,
+            autoPeriod, telePeriod, defenseData
+        };
+
+        document.getElementById('dataex').textContent = JSON.stringify(data, null, 2);
+    }
+});
