@@ -4,6 +4,10 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <script src="main.js?v=1"></script>
+  <script src="qrcode.js?v=1"></script>
+  <script src="qrcode.min.js?v=1"></script>
+  <script src="jquery.min.js?v=1"></script>
+  <script src="https://cdn.jsdelivr.net/gh/davidshimjs/qrcodejs/qrcode.min.js"></script>
   <title>Scouting</title>
   <style>
     :root {
@@ -79,14 +83,14 @@
   <div id="stage0" class="container">
     <center><h1>Scouting</h1></center>
     <center><p>Daedalus 1.0</p></center>
-      <input style="text-align:center;" type="text" placeholder="Enter your name" />
+      <input id="namedat" style="text-align:center;" type="text" placeholder="Enter your name" />
       <select name="team" id="scouterteamnumber">
         <option value="2839">2839</option>
         <option value="other">other</option>
       </select>
-      <input style="text-align:center;" type="text" placeholder="Enter team Number (your scouting)" />
-      <input style="text-align:center;" type="text" placeholder="Match Number" />
-      <input style="text-align:center;" type="text" placeholder="Enter your name" />
+      <input id="scoutingteamdat" style="text-align:center;" type="text" placeholder="Enter team Number (your scouting)" />
+      <input id="matchnumber" style="text-align:center;" type="text" placeholder="Match Number" />
+      <input id="position" style="text-align:center;" type="text" placeholder="Position (r1, r2, r3, b1, b2, b3)" />
 
       <div style="display:flex;align-items:center;justify-content:space-between;">
       <center><button onclick="">Autofill</button></center>
@@ -120,7 +124,7 @@
             </div>
             <div id="autobtns4" class="contained-buttons">
               <center><button onclick="logData('DEALG')">Dealgae</button></center>
-              <center><button onclick="">Leave</button></center>
+              <center><button id="leave" onclick="logData('LVE')">Leave</button></center>
               </div>
 
       <br><br>
@@ -157,7 +161,7 @@
             </div>
             <div id="autobtns4" class="contained-buttons">
               <center><button onclick="logData('sDEALG')">Dealgae</button></center>
-              <center><button onclick="">Leave</button></center>
+              <center><button id="sleave" onclick="logData('sLVE')">Leave</button></center>
               </div>
 
       <br><br>
@@ -172,15 +176,15 @@
   <div id="stage3" style="display:none;" class="container">
     <center><h1>Data</h1></center>
     <p>Auto Period</p>
-    <input style="text-align:center;" type="text" placeholder="Auto Period Data (Speed, Path)" />
+    <input id="autoperiod" style="text-align:center;" type="text" placeholder="Auto Period Data (Speed, Path)" />
     <p>Teleop Period</p>
-    <input style="text-align:center;" type="text" placeholder="Teleop Period Data (Speed, Points)" />
+    <input id="teleperiod" style="text-align:center;" type="text" placeholder="Teleop Period Data (Speed, Points)" />
     <p>Defense (opt)</p>
-    <input style="text-align:center;" type="text" placeholder="Defense Data" />
-      
+    <input id="defensedata" style="text-align:center;" type="text" placeholder="Defense Data" />
+    <textarea id="dataex" placeholder="Data"></textarea>
       <div style="display:flex;align-items:center;justify-content:space-between;">
       <center><button onclick="stageSel('2')">Back</button></center>
-      <center><button onclick="">Show QR</button></center>
+      <center><button onclick="sendDataWebhookVersion();">Send Data (Webhook)</button></center>
       </div>
       
   </div>
